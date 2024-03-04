@@ -73,6 +73,11 @@ fn delete_baza(id:i32) -> Value {
     ])
 }
 
+#[catch(404)]
+fn not_found() -> Value {
+    json!("Not found")
+}
+
 
 
 
@@ -89,6 +94,9 @@ async fn main() {
             update_baza,
             delete_baza
             ])
+        .register("/", catchers![
+            not_found
+        ])
         .launch()
         .await;
 }
