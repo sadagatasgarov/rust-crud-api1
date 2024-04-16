@@ -1,10 +1,12 @@
-#[macro_use]
-extern crate rocket;
+#[macro_use] extern crate rocket;
+extern crate diesel;
+
+#[macro_use] 
+extern crate rocket_sync_db_pools;
 
 mod auth;
 
 use auth::BasicAuth;
-
 use rocket::serde::json::{json, Value};
 use rocket::response::status;
 
@@ -13,8 +15,12 @@ use rocket::response::status;
 //     json!("Hello, world!")
 // }
 
+#[database("sqlite")]
+struct DbConn(diesel::SqliteConnection);
+
+
 #[get("/baza")]
-fn get_baza(_auth: BasicAuth) -> Value {
+fn get_baza(_auth: BasicAuth, _db: DbConn) -> Value {
     json!([
         {
             "id": 1,
@@ -87,7 +93,7 @@ async fn main() {
                 delete_baza
             ],
         )
-        .register("/", catchers![not_found])
+        .register("/", catchers![not_found]).attach(DbConn::fairing())
         .launch()
         .await;
 }
