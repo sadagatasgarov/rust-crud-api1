@@ -22,7 +22,7 @@ fn get_baza() -> Value {
 
         {
             "id": 2,
-            "name": "Sakh Asga"
+            "name": "Sakh Asga2"
         }
     ])
 }
