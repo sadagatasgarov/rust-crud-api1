@@ -8,10 +8,10 @@ use auth::BasicAuth;
 use rocket::serde::json::{json, Value};
 use rocket::response::status;
 
-#[get("/")]
-fn hello() -> Value {
-    json!("Hello, world!")
-}
+// #[get("/")]
+// fn hello() -> Value {
+//     json!("Hello, world!")
+// }
 
 #[get("/baza")]
 fn get_baza(_auth: BasicAuth) -> Value {
@@ -79,7 +79,7 @@ async fn main() {
         .mount(
             "/",
             routes![
-                hello,
+               // hello,
                 get_baza,
                 view_baza,
                 create_baza,

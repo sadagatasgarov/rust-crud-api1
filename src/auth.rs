@@ -57,3 +57,7 @@ impl<'r> FromRequest<'r> for BasicAuth {
 }
 
 //curl 127.0.0.1:8000/baza -H 'Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+//curl -X POST -H 'Content-type: application/json' -H 'Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==' http://127.0.0.1:8000/baza
+//curl 127.0.0.1:8000/baza -X POST -H 'Content-type: application/json' -H 'Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+//> curl 127.0.0.1:8000/baza/1 -X PUT -H 'Content-type: application/json' -H 'Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+//[{"email":"sadagatasgarov@gmil.com","id":1,"name":"Sada2 Asga2"}]%  
