@@ -55,3 +55,5 @@ impl<'r> FromRequest<'r> for BasicAuth {
         Outcome::Error((Status::Unauthorized, ()))
     }
 }
+
+//curl 127.0.0.1:8000/baza -H 'Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=='

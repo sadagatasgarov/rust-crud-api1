@@ -6,9 +6,7 @@ mod auth;
 use auth::BasicAuth;
 
 use rocket::serde::json::{json, Value};
-/*
 use rocket::response::status;
-*/
 
 #[get("/")]
 fn hello() -> Value {
@@ -16,7 +14,7 @@ fn hello() -> Value {
 }
 
 #[get("/baza")]
-fn get_baza(auth: BasicAuth) -> Value {
+fn get_baza(_auth: BasicAuth) -> Value {
     json!([
         {
             "id": 1,
@@ -31,7 +29,7 @@ fn get_baza(auth: BasicAuth) -> Value {
 }
 
 #[get("/baza/<id>")]
-fn view_baza(id: i32) -> Value {
+fn view_baza(id: i32, _auth: BasicAuth) -> Value {
     json!([
         {
             "id": id,
@@ -42,7 +40,7 @@ fn view_baza(id: i32) -> Value {
 }
 
 #[post("/baza", format = "json")]
-fn create_baza() -> Value {
+fn create_baza(_auth: BasicAuth) -> Value {
     json!([
         {
             "id": 3,
@@ -53,7 +51,7 @@ fn create_baza() -> Value {
 }
 
 #[put("/baza/<id>", format = "json")]
-fn update_baza(id: i32) -> Value {
+fn update_baza(id: i32, _auth: BasicAuth) -> Value {
     json!([
         {
             "id": id,
@@ -64,15 +62,9 @@ fn update_baza(id: i32) -> Value {
 }
 
 
-#[delete("/baza/<id>")]
-fn delete_baza(id: i32) -> Value {
-    json!([
-        {
-            "id": id,
-            "name": "Sada2 Asga2",
-            "email": "sadagatasgarov@gmil.com"
-        }
-    ])
+#[delete("/baza/<_id>")]
+fn delete_baza(_id: i32, _auth: BasicAuth) -> status::NoContent{
+    status::NoContent
 }
 
 #[catch(404)]
