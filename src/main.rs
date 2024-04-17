@@ -33,14 +33,13 @@ async fn get_baza(_auth: BasicAuth, db: DbConn) -> Value {
 }
 
 #[get("/baza/<id>")]
-fn view_baza(id: i32, _auth: BasicAuth) -> Value {
-    json!([
-        {
-            "id": id,
-            "name": "Sada Asga",
-            "email": "sadagatasgarov@gmil.com"
-        }
-    ])
+async fn view_baza(id: i32, _auth: BasicAuth, db: DbConn ) -> Value {
+    db.run( move |c| {
+        let baz = baza::table.find(id)
+        .get_result::<Baza>(c)
+        .expect("bazaya baxanda problem oldu");
+    json!(baz)
+    }).await
 }
 
 #[post("/baza", format = "json", data = "<new_baza>")]
@@ -54,21 +53,29 @@ async fn create_baza(_auth: BasicAuth, db: DbConn, new_baza: Json<NewBaza>) -> V
     }).await
 }
 
-#[put("/baza/<id>", format = "json")]
-fn update_baza(id: i32, _auth: BasicAuth) -> Value {
-    json!([
-        {
-            "id": id,
-            "name": "Sada2 Asga2",
-            "email": "sadagatasgarov@gmil.com"
-        }
-    ])
+#[put("/baza/<id>", format = "json", data = "<baz>")]
+async fn update_baza(id: i32, _auth: BasicAuth, db: DbConn, baz: Json<Baza>) -> Value {
+    db.run(move |c|{
+        let result = diesel::update(baza::table.find(id))
+        .set((
+            baza::email.eq(baz.email.to_owned()),
+            baza::email.eq(baz.name.to_owned())
+        ))
+        .execute(c)
+        .expect("Update eden zaman xeta oldu");
+    json!(result)
+    }).await
 }
 
 
-#[delete("/baza/<_id>")]
-fn delete_baza(_id: i32, _auth: BasicAuth) -> status::NoContent{
-    status::NoContent
+#[delete("/baza/<id>")]
+async fn delete_baza(id: i32, _auth: BasicAuth, db: DbConn) -> status::NoContent{
+    db.run(move |c|{
+        diesel::delete(baza::table.find(id))
+        .execute(c)
+        .expect("");
+        status::NoContent
+    }).await
 }
 
 #[catch(404)]

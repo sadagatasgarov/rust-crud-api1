@@ -1,8 +1,8 @@
 use super::schema::baza;
 
-#[derive(serde::Serialize, Queryable)]
+#[derive(serde::Serialize, serde::Deserialize, Queryable)]
 pub struct Baza {
-    pub id: Option<i32>,
+    pub id: i32,
     pub name: String,
     pub email: String,
     pub created_at: String,
@@ -10,7 +10,7 @@ pub struct Baza {
 
 
 #[derive(serde::Deserialize, Insertable)]
-#[table_name = "baza"]
+#[diesel(table_name = baza)]  //#[table_name = "baza"] deprecated
 pub struct NewBaza {
     pub name: String,
     pub email: String,
