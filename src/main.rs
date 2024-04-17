@@ -1,14 +1,19 @@
 #[macro_use] extern crate rocket;
 extern crate diesel;
 
-#[macro_use] 
-extern crate rocket_sync_db_pools;
+#[macro_use] extern crate rocket_sync_db_pools;
 
 mod auth;
+mod models;
+mod schema;
 
 use auth::BasicAuth;
+use diesel::prelude::*;
+use models::Baza;
+use schema::baza;
 use rocket::serde::json::{json, Value};
 use rocket::response::status;
+
 
 // #[get("/")]
 // fn hello() -> Value {
@@ -20,18 +25,11 @@ struct DbConn(diesel::SqliteConnection);
 
 
 #[get("/baza")]
-fn get_baza(_auth: BasicAuth, _db: DbConn) -> Value {
-    json!([
-        {
-            "id": 1,
-            "name": "Sada Asga"
-        },
-
-        {
-            "id": 2,
-            "name": "Sakh Asga2"
-        }
-    ])
+async fn get_baza(_auth: BasicAuth, db: DbConn) -> Value {
+    db.run(|c|{
+        let result = baza::table.limit(100).load::<Baza>(c).expect("Failed to read Baza daxil olmalari");
+        json!(result)
+    }).await
 }
 
 #[get("/baza/<id>")]
