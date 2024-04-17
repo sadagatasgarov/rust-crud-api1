@@ -92,3 +92,13 @@
 // ┌[sada☮SA]-(~/RUST/rust-crud-api1)-[git://main ✗]-
 // └> diesel migration run --database-url=database.sqlite
 // Running migration 2024-04-16-192907_baza
+
+
+
+
+
+curl 127.0.0.1:8000/baza -H 'Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==' -X POST -H 'Content-type: application/json' -d '{"name":"John Doeee", "email":"j_d@example.com"}'
+
+ curl 127.0.0.1:8000/baza -H 'Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==' -H 'Content-type: application/json'
+ 
+[{"created_at":"2024-04-17 09:59:08","email":"j_d@example.com","id":1,"name":"John Doeee"},{"created_at":"2024-04-17 09:59:53","email":"j_d@example.com","id":2,"name":"John Doeee"},{"created_at":"2024-04-17 09:59:55","email":"j_d@example.com","id":3,"name":"John Doeee"},{"created_at":"2024-04-17 10:01:27","email":"j_d@example.com","id":4,"name":"qqqqqJohn Doeee"}]% 

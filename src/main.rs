@@ -1,5 +1,5 @@
 #[macro_use] extern crate rocket;
-extern crate diesel;
+#[macro_use] extern crate diesel;
 
 #[macro_use] extern crate rocket_sync_db_pools;
 
@@ -9,9 +9,9 @@ mod schema;
 
 use auth::BasicAuth;
 use diesel::prelude::*;
-use models::Baza;
+use models::{Baza, NewBaza};
 use schema::baza;
-use rocket::serde::json::{json, Value};
+use rocket::serde::json::{json, Json, Value};
 use rocket::response::status;
 
 
@@ -43,15 +43,15 @@ fn view_baza(id: i32, _auth: BasicAuth) -> Value {
     ])
 }
 
-#[post("/baza", format = "json")]
-fn create_baza(_auth: BasicAuth) -> Value {
-    json!([
-        {
-            "id": 3,
-            "name": "Sada2 Asga2",
-            "email": "sadagatasgarov@gmil.com"
-        }
-    ])
+#[post("/baza", format = "json", data = "<new_baza>")]
+async fn create_baza(_auth: BasicAuth, db: DbConn, new_baza: Json<NewBaza>) -> Value {
+    db.run(|c| {
+        let result = diesel::insert_into(baza::table)
+        .values(new_baza.into_inner())
+        .execute(c)
+        .expect("Elave ederken problem oldu");
+        json!(result)
+    }).await
 }
 
 #[put("/baza/<id>", format = "json")]
