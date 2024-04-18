@@ -10,12 +10,9 @@ pub struct Baza {
     pub created_at: String,
 }
 
-
 #[derive(serde::Deserialize, Insertable)]
-#[diesel(table_name = baza)]  //#[table_name = "baza"] deprecated
+#[diesel(table_name = baza)] //#[table_name = "baza"] deprecated
 pub struct NewBaza {
     pub name: String,
     pub email: String,
 }
-
-

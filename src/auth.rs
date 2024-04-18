@@ -1,5 +1,4 @@
-use rocket::{request::Outcome, http::Status, request::FromRequest, Request};
-
+use rocket::{http::Status, request::FromRequest, request::Outcome, Request};
 
 pub struct BasicAuth {
     pub username: String,
@@ -25,29 +24,24 @@ impl BasicAuth {
         let decoded_str = String::from_utf8(decoded).ok()?;
         let split = decoded_str.split(":").collect::<Vec<_>>();
 
-        if split.len() !=2 {
+        if split.len() != 2 {
             return None;
         }
 
         let (username, password) = (split[0].to_string(), split[1].to_string());
 
-        Some(BasicAuth{
-            username,
-            password
-        })
-
-
+        Some(BasicAuth { username, password })
     }
 }
 
 #[rocket::async_trait]
 impl<'r> FromRequest<'r> for BasicAuth {
     type Error = ();
-    
+
     async fn from_request(request: &'r Request<'_>) -> Outcome<Self, Self::Error> {
         let auth_header = request.headers().get_one("Authorization");
         if let Some(auth_header) = auth_header {
-            if let Some(auth) = Self::from_authorization_header(auth_header){
+            if let Some(auth) = Self::from_authorization_header(auth_header) {
                 return Outcome::Success(auth);
             }
         }
